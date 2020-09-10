@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+from cnn import  CNN
+from PIL import ImageEnhance 
 
 summation = 0
 iterate = 0
@@ -8,32 +10,32 @@ iterate_1 = 0
 Nexp = 1
 Npulls = 150
 plt.figure(figsize=(4,9))
+
+cnn = CNN()
+
+arms = ["do_nothing","crt+", "crt-", "expo+", "expo-", "sat+", "sat-"]
+
 class Bandit:
     def __init__(self,N_arm,mean):
         self.N_arm = N_arm
         self.mean_rate = mean
-        self.arm_values = np.random.normal(0,1, self.N_arm)
+        # self.arm_values = np.random.normal(0,1, self.N_arm)
         self.K = np.zeros(self.N_arm)
         self.est_values = np.ones(self.N_arm)*self.mean_rate
 
 
-    def get_reward(self,action):
-        noise = np.random.normal(0,1)
-        reward = self.arm_values[action] + noise
-        return reward
+    # def get_reward(self,action):
+    #     noise = np.random.normal(0,1)
+    #     reward = self.arm_values[action] + noise
+    #     return reward
 
     def choose_eps_greedy(self,n):
-
-
-
         action_selected= np.argmax(ucb (bandit.est_values, n, bandit.K))
-
-        print ("arm_average :", ucb (self.est_values, n, self.K),"arm_selected :",action_selected)
+        print ("arm_average :", ucb(self.est_values, n, self.K),"arm_selected :",action_selected)
         return action_selected
 
     def update_est(self,action,reward):
         self.K[action] += 1
-
         alpha = 1./self.K[action]
         self.est_values[action] += alpha * (reward - self.est_values[action]) 
         return self.est_values[action]
@@ -49,7 +51,12 @@ def run_experiment(bandit,Npulls):
             for i in range(Npulls):
                 iterate = iterate + 1
                 action = bandit.choose_eps_greedy(iterate)
-                R = bandit.get_reward(action)
+                # R = bandit.get_reward(action)
+                if action == 0:
+
+                elif action == 1
+                R = cnn.get_rewards(IMAGE)
+
                 bandit.update_est(action,R)
                 history.append(R)
 
@@ -81,7 +88,7 @@ avg_outcome= np.zeros(Npulls)
 
 
 for i in range(Nexp):
-    bandit = Bandit(4, 0.0)
+    bandit = Bandit(len(actions), 0.0)
     plt.clf()
     avg_outcome += run_experiment(bandit,Npulls)
 avg_outcome /= np.float(Nexp)
